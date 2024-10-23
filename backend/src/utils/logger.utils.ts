@@ -72,10 +72,6 @@ interface Logger {
   error: winston.LeveledLogMethod;
   warn: winston.LeveledLogMethod;
   info: winston.LeveledLogMethod;
-  http: winston.LeveledLogMethod;
-  verbose: winston.LeveledLogMethod;
-  debug: winston.LeveledLogMethod;
-  silly: winston.LeveledLogMethod;
 }
 
 export default logger as Logger;

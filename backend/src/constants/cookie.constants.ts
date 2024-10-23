@@ -1,0 +1,3 @@
+export const COOKIE_NAMES = {
+  TASK_MANAGER_TOKEN: "TASK_MANAGER_TOKEN",
+};

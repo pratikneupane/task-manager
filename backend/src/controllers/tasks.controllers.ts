@@ -3,6 +3,7 @@ import TasksService from "../services/tasks/";
 import Logger from "../utils/logger.utils";
 import { IAuthRequest } from "src/types/auth.types";
 import createHttpError from "../utils/httpErrors.utils";
+import mongoose from "mongoose";
 
 const getAllTasks = async (
   req: IAuthRequest,
@@ -48,32 +49,68 @@ const createTask = async (
   }
 };
 
-const updateTask = async (req: Request, res: Response, next: NextFunction) => {
+const updateTask = async (
+  req: IAuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const task = await TasksService.updateTask(req.params.id, req.body);
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      throw createHttpError.NotFound("Task not found");
+    }
+    const task = await TasksService.getTaskById(req.params.id);
+
+    if (!req.user) {
+      throw createHttpError.Unauthorized("Unauthorized");
+    }
+
     if (!task) {
       throw createHttpError.NotFound("Task not found");
     }
 
+    if (task.user.toString() !== req.user.id) {
+      throw createHttpError.Forbidden(
+        "You do not have permission to edit this task"
+      );
+    }
+
+    let updatedTask = await TasksService.updateTask(req.params.id, req.body);
+
     res
       .status(200)
-      .json({ message: "Tasks Updated Successfully", response: task });
+      .json({ message: "Task Updated Successfully", response: updatedTask });
   } catch (error) {
     Logger.error("Error updating task:", error);
     next(error);
   }
 };
 
-const deleteTask = async (req: Request, res: Response, next: NextFunction) => {
+const deleteTask = async (
+  req: IAuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const task = await TasksService.deleteTask(req.params.id);
+    const task = await TasksService.getTaskById(req.params.id);
+
+    if (!req.user) {
+      throw createHttpError.Unauthorized("Unauthorized");
+    }
+
     if (!task) {
       throw createHttpError.NotFound("Task not found");
     }
+    if (task.user.toString() !== req.user.id) {
+      throw createHttpError.Forbidden(
+        "You do not have permission to delete this task"
+      );
+    }
+
+    const deletedTask = await TasksService.deleteTask(req.params.id);
 
     res
       .status(200)
-      .json({ message: "Tasks Deleted Successfully", response: task });
+      .json({ message: "Task Deleted Successfully", response: deletedTask });
   } catch (error) {
     Logger.error("Error deleting task:", error);
     next(error);

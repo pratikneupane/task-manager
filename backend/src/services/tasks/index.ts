@@ -9,12 +9,18 @@ const createTask = (taskData: any): Promise<ITask> => {
   return Task.create(taskData);
 };
 
-const updateTask = (taskId: string, taskData: any): Promise<ITask | null> => {
-  return Task.findByIdAndUpdate(taskId, taskData, { new: true });
+const updateTask = async (taskId: string, taskData: any): Promise<ITask | null> => {
+  const task = await Task.findByIdAndUpdate(taskId, taskData, { new: true });
+  return task;
 };
+
 
 const deleteTask = (taskId: string): Promise<ITask | null> => {
   return Task.findByIdAndDelete(taskId);
+};
+
+const getTaskById = (taskId: string): Promise<ITask | null> => {
+  return Task.findById(taskId);
 };
 
 const TasksService = {
@@ -22,6 +28,7 @@ const TasksService = {
   createTask,
   updateTask,
   deleteTask,
+  getTaskById,
 };
 
 export default TasksService;

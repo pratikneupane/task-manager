@@ -11,8 +11,10 @@ import Logger from "../utils/logger.utils";
 mongoose.set("strictQuery", false);
 
 const connect = async (): Promise<void> => {
-  const url: string = process.env.MONGODB_URL || "mongodb://localhost:27017";
-  
+  const url: string = process.env.MONGODB_URL!;
+
+  console.log("MongoURL:", url);
+
   try {
     await mongoose.connect(url);
     Logger.info("Database connected");

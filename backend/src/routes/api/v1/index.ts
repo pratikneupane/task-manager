@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
 
 import AuthRoutes from "./auth.routes";
+import TaskRoutes from "./tasks.routes";
 
 /**
  * Handles the root route for the V1 APIs in the Task Manager API.
@@ -15,5 +16,6 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.use("/auth", AuthRoutes);
+router.use("/tasks", TaskRoutes);
 
 export default router;

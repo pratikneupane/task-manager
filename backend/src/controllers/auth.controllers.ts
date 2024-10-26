@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import AuthService from "../../services/auth/";
-import Logger from "../../utils/logger.utils";
-import { COOKIE_NAMES } from "../../constants/cookie.constants";
+import AuthService from "../services/auth";
+import Logger from "../utils/logger.utils";
+import { COOKIE_NAMES } from "../constants/cookie.constants";
 
 const registerController = async (
   req: Request,
@@ -13,13 +13,13 @@ const registerController = async (
   try {
     const user = await AuthService.register(email, password);
     if (!user) {
-      Logger.error("register failed");
-      return res.status(400).json({ message: "User register failed" });
+      Logger.error("User Registration failed");
+      return res.status(400).json({ message: "User Registration failed" });
     }
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    Logger.error("register error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    Logger.error("Register error:", error);
+    next(error);
   }
 };
 
@@ -46,7 +46,7 @@ const loginController = async (
     res.status(200).json({ message: "Login successful", token });
   } catch (error) {
     Logger.error("Login error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
 

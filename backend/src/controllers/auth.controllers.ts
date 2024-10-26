@@ -17,7 +17,9 @@ const registerController = async (
       Logger.error("User Registration failed for email:", email);
       throw createHttpError.BadRequest("User Registration failed");
     }
-    res.status(201).json({ message: "User registered successfully" });
+    res
+      .status(201)
+      .json({ message: "User registered successfully", response: user });
   } catch (error) {
     Logger.error("Register error:", error);
     next(error);
@@ -44,14 +46,17 @@ const loginController = async (
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ message: "Login successful", token });
+    res.status(200).json({ message: "Login successful", resopnse: { token } });
   } catch (error) {
     Logger.error("Login error:", error);
-    // Check if the error is an instance of HttpError
-    if (error instanceof Error && 'statusCode' in error) {
+    if (error instanceof Error && "statusCode" in error) {
       return next(error);
     }
-    next(createHttpError.InternalServerError("Something went wrong, please try again."));
+    next(
+      createHttpError.InternalServerError(
+        "Something went wrong, please try again."
+      )
+    );
   }
 };
 const AuthController = {

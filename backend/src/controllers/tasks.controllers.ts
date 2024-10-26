@@ -7,7 +7,9 @@ import createHttpError from "../utils/httpErrors.utils";
 const getAllTasks = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const tasks = await TasksService.getAllTasks();
-    res.status(200).json(tasks);
+    res
+      .status(200)
+      .json({ message: "Tasks Fetched Successfully", response: tasks });
   } catch (error) {
     Logger.error("Error fetching tasks:", error);
     next(createHttpError.InternalServerError("Failed to fetch tasks"));
@@ -29,7 +31,9 @@ const createTask = async (
       user: req.user.id,
     });
 
-    res.status(201).json(task);
+    res
+      .status(201)
+      .json({ message: "Task Created Successfully", response: task });
   } catch (error) {
     Logger.error("Error creating task:", error);
     next(error);
@@ -43,7 +47,9 @@ const updateTask = async (req: Request, res: Response, next: NextFunction) => {
       throw createHttpError.NotFound("Task not found");
     }
 
-    res.status(200).json(task);
+    res
+      .status(200)
+      .json({ message: "Tasks Updated Successfully", response: task });
   } catch (error) {
     Logger.error("Error updating task:", error);
     next(error);
@@ -57,7 +63,9 @@ const deleteTask = async (req: Request, res: Response, next: NextFunction) => {
       throw createHttpError.NotFound("Task not found");
     }
 
-    res.status(200).json(task);
+    res
+      .status(200)
+      .json({ message: "Tasks Deleted Successfully", response: task });
   } catch (error) {
     Logger.error("Error deleting task:", error);
     next(error);

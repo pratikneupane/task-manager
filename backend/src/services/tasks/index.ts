@@ -9,10 +9,6 @@ const createTask = (taskData: any): Promise<ITask> => {
   return Task.create(taskData);
 };
 
-const getTaskByUserId = (userId: string): Promise<ITask[] | null> => {
-  return Task.find({ user: userId });
-};
-
 const updateTask = (taskId: string, taskData: any): Promise<ITask | null> => {
   return Task.findByIdAndUpdate(taskId, taskData, { new: true });
 };
@@ -24,7 +20,6 @@ const deleteTask = (taskId: string): Promise<ITask | null> => {
 const TasksService = {
   getAllTasks,
   createTask,
-  getTaskByUserId,
   updateTask,
   deleteTask,
 };

@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { IUser } from "../../types/auth.types";
 
-const JWT_SECRET = process.env.JWT_SECRET || "jsonwebtokenisthebestwaytodothis";
+const JWT_SECRET = process.env.JWT_SECRET || "JWTisthebestwaytoencrypt";
 
 const register = async (
   email: string,

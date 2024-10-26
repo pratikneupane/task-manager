@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import TasksService from "../services/tasks/";
 import Logger from "../utils/logger.utils";
+import { IAuthRequest } from "src/types/auth.types";
 
 const getAllTasks = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -11,16 +12,30 @@ const getAllTasks = async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 };
-const createTask = async (req: Request, res: Response, next: NextFunction) => {
+const createTask = async (
+  req: IAuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const task = await TasksService.createTask(req.body);
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const task = await TasksService.createTask({
+      ...req.body,
+      user: req.user.id,
+    });
     res.status(201).json(task);
   } catch (error) {
     Logger.error("Error creating task:", error);
     next(error);
   }
 };
-const getTaskByUserId = async (req: Request, res: Response, next: NextFunction) => {
+const getTaskByUserId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const task = await TasksService.getTaskByUserId(req.params.id);
     if (!task) {

@@ -1,8 +1,8 @@
 import { ITask } from "src/types/tasks.types";
 import { Task } from "../../models/task.model";
 
-const getAllTasks = (): Promise<ITask[] | null> => {
-  return Task.find();
+const getAllTasks = (userId: string): Promise<ITask[] | null> => {
+  return Task.find({ user: userId });
 };
 
 const createTask = (taskData: any): Promise<ITask> => {

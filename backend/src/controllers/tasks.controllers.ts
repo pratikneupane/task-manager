@@ -4,9 +4,17 @@ import Logger from "../utils/logger.utils";
 import { IAuthRequest } from "src/types/auth.types";
 import createHttpError from "../utils/httpErrors.utils";
 
-const getAllTasks = async (req: Request, res: Response, next: NextFunction) => {
+const getAllTasks = async (
+  req: IAuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const tasks = await TasksService.getAllTasks();
+    if (!req.user) {
+      throw createHttpError.Unauthorized("Unauthorized");
+    }
+
+    const tasks = await TasksService.getAllTasks(req.user.id!);
     res
       .status(200)
       .json({ message: "Tasks Fetched Successfully", response: tasks });

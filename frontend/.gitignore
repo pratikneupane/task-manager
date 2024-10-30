@@ -31,3 +31,5 @@ out/
 
 # Mac system files
 .DS_Store
+
+test-results

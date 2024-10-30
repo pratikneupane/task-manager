@@ -14,11 +14,12 @@ const getAllTasks = async (
     if (!req.user) {
       throw createHttpError.Unauthorized("Unauthorized");
     }
-
-    const tasks = await TasksService.getAllTasks(req.user.id!);
+    const page = req?.query?.page || 1;
+    const count = await TasksService.getTotalTasksCount(req.user.id!);
+    const tasks = await TasksService.getAllTasks(req.user.id!, parseInt(page as string));
     res
       .status(200)
-      .json({ message: "Tasks Fetched Successfully", response: tasks });
+      .json({ message: "Tasks Fetched Successfully", response: tasks, count: count });
   } catch (error) {
     Logger.error("Error fetching tasks:", error);
     next(createHttpError.InternalServerError("Failed to fetch tasks"));
@@ -117,11 +118,36 @@ const deleteTask = async (
   }
 };
 
+const searchTasks = async (
+  req: IAuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.user) {
+      throw createHttpError.Unauthorized("Unauthorized");
+    }
+
+    const query = req.query.query as string;
+    const tasks = await TasksService.searchTasks(req.user.id!, query);
+
+    res.status(200).json({
+      message: "Tasks Found Successfully",
+      response: tasks,
+    });
+  } catch (error) {
+    Logger.error("Error searching tasks:", error);
+    next(createHttpError.InternalServerError("Failed to search tasks"));
+  }
+};
+
+
 const TaskController = {
   getAllTasks,
   createTask,
   updateTask,
   deleteTask,
+  searchTasks,
 };
 
 export default TaskController;

@@ -34,7 +34,9 @@ const loginController = async (
   const { email, password } = req.body;
 
   try {
-    const token = await AuthService.login(email, password);
+    const userInfo = await AuthService.login(email, password);
+    const token = userInfo?.token;
+    const user = userInfo?.user;
     if (!token) {
       Logger.error("Login failed for email:", email);
       throw createHttpError.Unauthorized("Invalid credentials");
@@ -46,7 +48,7 @@ const loginController = async (
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ message: "Login successful", resopnse: { token } });
+    res.status(200).json({ message: "Login successful", response: { token, user } });
   } catch (error) {
     Logger.error("Login error:", error);
     if (error instanceof Error && "statusCode" in error) {

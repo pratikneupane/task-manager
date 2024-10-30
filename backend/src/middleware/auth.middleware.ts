@@ -5,6 +5,19 @@ import createHttpError from "../utils/httpErrors.utils";
 
 const JWT_SECRET = process.env.JWT_SECRET || "JWTisthebestwaytoencrypt";
 
+/**
+ * Express middleware to authenticate the user.
+ *
+ * Checks if the request contains a valid token and stores the user's data in
+ * the request object.
+ *
+ * @throws {Unauthorized} If the token is invalid, expired or not provided.
+ *
+ * @param req - The Express request object.
+ * @param res - The Express response object.
+ * @param next - The Express next function.
+ */
+
 const userAuth = async (
   req: IAuthRequest,
   res: Response,

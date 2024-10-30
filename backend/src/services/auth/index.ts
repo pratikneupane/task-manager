@@ -17,7 +17,7 @@ const register = async (
 const login = async (
   email: string,
   password: string
-): Promise<string | null> => {
+): Promise<{ token: string; user: IUser } | null> => {
   const user = await User.findOne({ email });
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -28,7 +28,7 @@ const login = async (
     expiresIn: "1d",
   });
 
-  return token;
+  return {token, user};
 };
 
 const AuthService = {

@@ -3,7 +3,7 @@
     "ext": ".ts",
     "exec": "ts-node --project tsconfig.json src/app.ts",
     "env": {
-      "PORT": "9019"
+      "PORT": "3000"
     }
   }
   

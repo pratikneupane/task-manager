@@ -2,7 +2,7 @@ import axios from "axios";
 import { ApiResponse, Task, LoginCredentials, LoginResponse } from "../types";
 
 const api = axios.create({
-  baseURL: "http://localhost:9019/api/v1",
+  baseURL: "http://localhost:3000/api/v1",
   withCredentials: true,
 });
 

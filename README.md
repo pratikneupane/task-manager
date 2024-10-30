@@ -90,3 +90,46 @@ taskSchema = {
 3. Protected routes using authentication middleware
 4. Input validation using Zod schemas
 5. CORS configuration for API security
+
+## Getting Started
+
+Follow these steps to set up and run the project:
+
+### Running the Application
+1. **Clone the Repository** (if you haven't already):
+   For SSH
+   ```bash
+   git clone git@github.com:pratikneupane/task-manager.git
+   cd task-manager-app
+   ```
+   For HTTPS
+    ```bash
+   git clone https://github.com/pratikneupane/task-manager.git
+   cd task-manager-app
+   ```
+### Prerequisites
+- **Docker**: Make sure Docker is installed on your system.
+- **Permissions**: Ensure `start.sh` has executable permissions. If not, set them with:
+  ```bash
+  chmod +x start.sh
+  ```
+
+2. **Run the `start.sh` Script**:
+   ```bash
+   ./start.sh
+   ```
+   - This script will:
+     - Start the frontend service on port **5173**.
+     - Start the backend service on port **3000**.
+     - Open your default web browser at [http://localhost:5173](http://localhost:5173).
+
+3. **Access the Application**:
+   - After running the script, you can view the frontend at [http://localhost:5173](http://localhost:5173).
+   - The backend API will be running at [http://localhost:3000](http://localhost:3000).
+
+### Stopping the Application
+To stop the services, press `Ctrl+C` in the terminal to end the log monitoring, then stop the containers:
+   ```bash
+   docker-compose -f frontend/docker-compose.yml down
+   docker-compose -f backend/docker-compose.yml down
+   ```
